@@ -59,3 +59,5 @@ app.include_router(senha.router)
 
 # Arquivos estáticos
 app.mount("/fotos", StaticFiles(directory="app/fotos"), name="fotos")
+from app import verificar_banco
+app.include_router(verificar_banco.router)
