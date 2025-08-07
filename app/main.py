@@ -58,3 +58,14 @@ from app import suplente
 app.include_router(suplente.router)
 from app import senha
 app.include_router(senha.router)
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from app.database import get_db
+
+@app.get("/testar-banco")
+def testar_banco(db: Session = Depends(get_db)):
+    try:
+        db.execute("SELECT 1")
+        return {"status": "✅ Conectado ao banco de dados"}
+    except Exception as e:
+        return {"status": "❌ Erro ao conectar", "detalhe": str(e)}
