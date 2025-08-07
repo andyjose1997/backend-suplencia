@@ -1,6 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import Base, engine
+from fastapi.staticfiles import StaticFiles
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+
+from app.database import Base, engine, get_db
 from app.models import Instrutor
 
 app = FastAPI()
@@ -24,48 +28,34 @@ app.add_middleware(
 def read_root():
     return {"mensagem": "API de Informações está ativa!"}
 
-from app import login
-from app import cadastro
-from app import visualizar
+# ✅ SUA NOVA ROTA DE TESTE DE CONEXÃO
+@app.get("/testar-banco")
+def testar_conexao(db: Session = Depends(get_db)):
+    try:
+        db.execute(text("SELECT 1"))
+        return {"status": "✅ Conectado ao banco de dados"}
+    except Exception as e:
+        return {"status": "❌ Erro ao conectar", "detalhe": str(e)}
+
+# Rotas
+from app import login, cadastro, visualizar, nome_tabelas, praticas, upload_foto, turno, lider, subs, quantos, anuncios, suplente, senha
+from app.rotas import instrutor_atual, impressao
 
 app.include_router(login.router)
 app.include_router(cadastro.router)
 app.include_router(visualizar.router)
-from app import nome_tabelas  
 app.include_router(nome_tabelas.router)
-from app import praticas
 app.include_router(praticas.router)
-from app import upload_foto
 app.include_router(upload_foto.router)
-from fastapi.staticfiles import StaticFiles
-
-app.mount("/fotos", StaticFiles(directory="app/fotos"), name="fotos")
-from app import turno
 app.include_router(turno.router)
-from app import lider
 app.include_router(lider.router)
-from app.rotas import instrutor_atual
 app.include_router(instrutor_atual.router)
-from app.rotas import impressao
 app.include_router(impressao.router)
-from app import subs  
 app.include_router(subs.router)
-from app import quantos
 app.include_router(quantos.router)
-from app import anuncios
 app.include_router(anuncios.router)
-from app import suplente
 app.include_router(suplente.router)
-from app import senha
 app.include_router(senha.router)
-from fastapi import Depends
-from sqlalchemy.orm import Session
-from app.database import get_db
 
-@app.get("/testar-banco")
-def testar_banco(db: Session = Depends(get_db)):
-    try:
-        db.execute("SELECT 1")
-        return {"status": "✅ Conectado ao banco de dados"}
-    except Exception as e:
-        return {"status": "❌ Erro ao conectar", "detalhe": str(e)}
+# Arquivos estáticos
+app.mount("/fotos", StaticFiles(directory="app/fotos"), name="fotos")
