@@ -1,14 +1,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# 🔐 Credenciais do MySQL
-DB_USER = "root"
-DB_PASSWORD = "26374246"
-DB_HOST = "localhost"
+# 🔐 Credenciais do MySQL fornecidas pelo freesqldatabase.com
+DB_USER = "sql5794088"
+DB_PASSWORD = "FRGkqV3adJ"
+DB_HOST = "sql5.freesqldatabase.com"
 DB_PORT = "3306"
-DB_NAME = "informacoes"
+DB_NAME = "sql5794088"
 
-# 🔗 URL de conexão
+# 🔗 URL de conexão (com PyMySQL)
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 # 🚀 Engine e sessão
@@ -18,7 +18,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # 📦 Base para os modelos
 Base = declarative_base()
 
-# ✅ Adicione esta função aqui
+# ✅ Função para obter a sessão do banco
 def get_db():
     db = SessionLocal()
     try:
