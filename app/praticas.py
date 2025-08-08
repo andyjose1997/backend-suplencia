@@ -150,3 +150,12 @@ def apagar_praticas_turno(turno: str, db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao apagar práticas: {str(e)}")
+# ✅ Obter o turno atual
+@router.get("/turno")
+def obter_turno_atual(db: Session = Depends(get_db)):
+    pratica_com_turno = db.query(PraticaGeral).filter(PraticaGeral.turno != "").first()
+
+    if not pratica_com_turno:
+        return {"turno": "manha"}  # Ou outro valor padrão se preferir
+
+    return {"turno": pratica_com_turno.turno}
