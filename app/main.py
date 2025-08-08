@@ -58,6 +58,9 @@ app.include_router(quantos.router)
 app.include_router(anuncios.router)
 app.include_router(suplente.router)
 app.include_router(senha.router)
+from app import visualizarsuper 
+
+app.include_router(visualizarsuper.router) 
 
 # Arquivos estáticos
 app.mount("/fotos", StaticFiles(directory="app/fotos"), name="fotos")
