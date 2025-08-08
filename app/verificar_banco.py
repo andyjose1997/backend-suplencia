@@ -1,18 +1,24 @@
-# app/verificar_banco.py
 from fastapi import APIRouter, Depends
-from sqlalchemy import inspect
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.database import get_db
 
 router = APIRouter()
 
-@router.get("/verificar-banco")
-def verificar_banco(db: Session = Depends(get_db)):
-    inspetor = inspect(db.bind)
-    resultado = {}
+@router.get("/testar-banco")
+def testar_banco(db: Session = Depends(get_db)):
+    try:
+        # 📄 Busca todas as tabelas
+        tabelas_resultado = db.execute(text("SHOW TABLES")).fetchall()
+        tabelas = [linha[0] for linha in tabelas_resultado]
 
-    for tabela in inspetor.get_table_names():
-        colunas = [coluna["name"] for coluna in inspetor.get_columns(tabela)]
-        resultado[tabela] = colunas
+        estrutura = {}
+        # 📑 Busca colunas de cada tabela
+        for tabela in tabelas:
+            colunas_resultado = db.execute(text(f"SHOW COLUMNS FROM {tabela}")).fetchall()
+            colunas = [coluna[0] for coluna in colunas_resultado]
+            estrutura[tabela] = colunas
 
-    return resultado
+        return estrutura
+    except Exception as e:
+        return {"erro": str(e)}
