@@ -63,6 +63,7 @@ class Impressao(Base):
     entregue = Column(Boolean, default=False)
     ate = Column(String(10), default="--")
     sub = Column(Integer, default=0)
+    supervisor = Column(String(255), nullable=False, default="0")
 
 # ✅ Modelo de Anúncio
 class Anuncio(Base):

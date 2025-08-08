@@ -13,3 +13,4 @@ class InstrutorCreate(BaseModel):
     senha: Optional[str] = None
     funcao: str
     colina: Optional[int] = 0
+    supervisor: Optional[str] = None  # 👈 String, já que no banco é VARCHAR
