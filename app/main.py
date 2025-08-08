@@ -20,7 +20,7 @@ origens_permitidas = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origens_permitidas,
+    allow_origins=["*"],  # ← para teste
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
