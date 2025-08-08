@@ -52,3 +52,15 @@ def atualizar_ate(dados: AteEntrada, db: Session = Depends(get_db)):
     db.add(instrutor)
     db.commit()
     return {"mensagem": "Horário atualizado com sucesso"}
+
+# PUT para definir supervisor
+@router.put("/instrutores/{nome}/supervisor")
+def definir_supervisor(nome: str, db: Session = Depends(get_db)):
+    instrutor = db.query(Instrutor).filter(Instrutor.instrutor == nome).first()
+    if not instrutor:
+        raise HTTPException(status_code=404, detail="Instrutor não encontrado")
+
+    instrutor.supervisor = "supervisor"
+    db.add(instrutor)
+    db.commit()
+    return {"mensagem": f"{instrutor.instrutor} agora é supervisor"}
