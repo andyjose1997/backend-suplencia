@@ -24,6 +24,9 @@ class Instrutor(Base):
     ate = Column(String(10), default="--")
     sub = Column(Integer, default=0)
 
+    supervisor = Column(String(255), nullable=True, default="0")
+
+
 # ✅ Modelo de Prática
 class PraticaGeral(Base):
     __tablename__ = "praticas_geral"
@@ -77,4 +80,3 @@ class SuplenteAtual(Base):
     __tablename__ = "suplente_atual"
 
     id = Column(String(36), primary_key=True, index=True)
-    instrutor = Column(String(100), nullable=False)
