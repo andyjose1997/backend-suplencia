@@ -14,7 +14,7 @@ Base.metadata.create_all(bind=engine)
 origens_permitidas = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://suplencia-ctm.vercel.app",  # ✅ ADICIONE ESTA LINHA
+    "https://suplencia-ctm.vercel.app", 
 
 ]
 
