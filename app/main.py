@@ -17,6 +17,7 @@ origens_permitidas = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://suplencia-ctm.vercel.app",
+    "https://suplencia-mtc.vercel.app",
     "https://backend-suplencia.onrender.com"
 ]
 
