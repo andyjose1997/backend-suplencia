@@ -35,7 +35,7 @@ def set_suplente(dados: SuplenteEntrada, db: Session = Depends(get_db)):
             db.add(existente)
 
         db.commit()
-        return {"mensagem": f"{dados.nome} agora é o suplente atual"}
+        return novo  # se for o objeto do SQLAlchemy com instrutor e id
 
     except HTTPException:
         raise
