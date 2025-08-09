@@ -82,3 +82,4 @@ class SuplenteAtual(Base):
     __tablename__ = "suplente_atual"
 
     id = Column(String(36), primary_key=True, index=True)
+    instrutor = Column(String(100), nullable=False)  # ← Adicionado
