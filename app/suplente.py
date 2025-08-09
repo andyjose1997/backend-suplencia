@@ -37,12 +37,19 @@ def set_suplente(dados: SuplenteEntrada, db: Session = Depends(get_db)):
 
     return {"instrutor": dados.nome.strip()}
 
-# 🔹 Apagar suplente
-@router.delete("/suplente_atual")
-def apagar_suplente(db: Session = Depends(get_db)):
-    atual = db.query(SuplenteAtual).first()
-    if not atual:
-        raise HTTPException(status_code=404, detail="Nenhum suplente atual")
-    db.delete(atual)
+@router.post("/suplente_atual")
+def set_suplente(dados: SuplenteEntrada, db: Session = Depends(get_db)):
+    if not dados.nome or not dados.nome.strip():
+        raise HTTPException(status_code=400, detail="Nome do suplente não pode ser vazio.")
+
+    existente = db.query(SuplenteAtual).first()
+
+    if existente:
+        existente.instrutor = dados.nome.strip()
+    else:
+        novo = SuplenteAtual(id=str(uuid.uuid4()), instrutor=dados.nome.strip())
+        db.add(novo)
+
     db.commit()
-    return {"mensagem": "Suplente removido"}
+
+    return {"mensagem": f"{dados.nome} agora é o suplente atual"}
