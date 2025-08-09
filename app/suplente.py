@@ -42,13 +42,15 @@ def set_suplente(dados: SuplenteEntrada, db: Session = Depends(get_db)):
     except Exception as e:
         # Retorna erro genérico sem quebrar CORS
         return {"erro": str(e)}
+@router.post("/suplente_atual")
+def set_suplente(dados: SuplenteEntrada, db: Session = Depends(get_db)):
+    existente = db.query(SuplenteAtual).first()
+    if existente:
+        db.delete(existente)
+        db.commit()
 
-# ✅ Apagar manualmente (opcional)
-@router.delete("/suplente_atual")
-def apagar_suplente(db: Session = Depends(get_db)):
-    atual = db.query(SuplenteAtual).first()
-    if not atual:
-        raise HTTPException(status_code=404, detail="Nenhum suplente atual para remover.")
-    db.delete(atual)
+    novo = SuplenteAtual(id=str(uuid.uuid4()), instrutor=dados.nome)
+    db.add(novo)
     db.commit()
-    return {"mensagem": "Suplente removido"}
+
+    return {"instrutor": dados.nome}  # ✅ React vai conseguir exibir
