@@ -9,18 +9,21 @@ from app.models import Instrutor
 
 app = FastAPI()
 
+# Criar as tabelas no banco, se não existirem
 Base.metadata.create_all(bind=engine)
 
+# ✅ Lista de origens permitidas
 origens_permitidas = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://suplencia-ctm.vercel.app", 
-
+    "https://suplencia-ctm.vercel.app",
+    "https://backend-suplencia.onrender.com"
 ]
 
+# ✅ Middleware de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # ← para teste
+    allow_origins=origens_permitidas,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,7 +33,7 @@ app.add_middleware(
 def read_root():
     return {"mensagem": "API de Informações está ativa!"}
 
-# ✅ SUA NOVA ROTA DE TESTE DE CONEXÃO
+# ✅ Rota de teste de conexão com o banco
 @app.get("/testar-banco")
 def testar_conexao(db: Session = Depends(get_db)):
     try:
@@ -39,8 +42,11 @@ def testar_conexao(db: Session = Depends(get_db)):
     except Exception as e:
         return {"status": "❌ Erro ao conectar", "detalhe": str(e)}
 
-# Rotas
-from app import login, cadastro, visualizar, nome_tabelas, praticas, upload_foto, turno, lider, subs, quantos, anuncios, suplente, senha
+# ✅ Importação e inclusão de rotas
+from app import (
+    login, cadastro, visualizar, nome_tabelas, praticas, upload_foto,
+    turno, lider, subs, quantos, anuncios, suplente, senha, visualizarsuper, verificar_banco
+)
 from app.rotas import instrutor_atual, impressao
 
 app.include_router(login.router)
@@ -58,11 +64,8 @@ app.include_router(quantos.router)
 app.include_router(anuncios.router)
 app.include_router(suplente.router)
 app.include_router(senha.router)
-from app import visualizarsuper 
-
-app.include_router(visualizarsuper.router) 
-
-# Arquivos estáticos
-app.mount("/fotos", StaticFiles(directory="app/fotos"), name="fotos")
-from app import verificar_banco
+app.include_router(visualizarsuper.router)
 app.include_router(verificar_banco.router)
+
+# ✅ Arquivos estáticos (imagens de perfil, etc.)
+app.mount("/fotos", StaticFiles(directory="app/fotos"), name="fotos")
