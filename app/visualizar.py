@@ -34,8 +34,8 @@ class InstrutorEdicao(BaseModel):
     funcao: str
 
 @router.put("/editar_instrutor/{id}")
-def editar_instrutor(id: int, dados: InstrutorEdicao, db: Session = Depends(get_db)):
-    instrutor = db.query(Instrutor).filter(Instrutor.id == id).first()
+def editar_instrutor(id: str, dados: InstrutorEdicao, db: Session = Depends(get_db)):
+    instrutor = db.query(Instrutor).filter(Instrutor.id == id.strip()).first()
     if not instrutor:
         raise HTTPException(status_code=404, detail="Instrutor não encontrado")
 
